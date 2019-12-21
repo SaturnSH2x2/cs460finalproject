@@ -25,7 +25,7 @@ Sprite3D = function(image, pixelSize, pixelDistance) {
 
 	// TODO: stubbed, add actual image loading functionality later
 	this.image = image;
-    this.bmpLoader = new bmpLoader(image);
+    //this.bmpLoader = new bmpLoader(image, this);
 
 	// individual size of a pixel
 	this.pixelSize = pixelSize;
@@ -36,6 +36,16 @@ Sprite3D = function(image, pixelSize, pixelDistance) {
 	// color palette of the sprite
 	// TODO: actually have the sprite analyze the image, currently pointless
 	this.colorPalette = {};
+}
+
+Sprite3D.prototype.loadPixelArray = function(scene, canvasCtx, width, height) {
+    console.log(width, height);
+    
+    for (var x = 0; x < width; x++) {
+        for (var y = 0; y < width; y++) {
+            //color = 
+        }
+    }
 }
 
 // TODO: stubbed, resize pixels properly, and don't forget to take center into account!
