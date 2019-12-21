@@ -25,6 +25,7 @@ Sprite3D = function(image, pixelSize, pixelDistance) {
 
 	// TODO: stubbed, add actual image loading functionality later
 	this.image = image;
+    this.bmpLoader = new bmpLoader(image);
 
 	// individual size of a pixel
 	this.pixelSize = pixelSize;
