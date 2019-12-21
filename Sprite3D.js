@@ -38,14 +38,40 @@ Sprite3D = function(image, pixelSize, pixelDistance) {
 	this.colorPalette = {};
 }
 
-Sprite3D.prototype.loadPixelArray = function(scene, canvasCtx, width, height) {
+Sprite3D.prototype.loadPixelArray = function(scene, ctx, width, height) {
     console.log(width, height);
+    boxGeo = new THREE.BoxGeometry(this.pixelSize, this.pixelSize, this.pixelSize);
     
     for (var x = 0; x < width; x++) {
-        for (var y = 0; y < width; y++) {
-            //color = 
+        for (var y = 0; y < height; y++) {
+            color = ctx.getImageData(x, y, 1, 1).data;
+            console.log(color);
+            
+            // transparent color
+            if (color[0] == 255 && color[2] == 255)
+                continue;
+            
+            colorHex = color[0]
+            colorHex = (colorHex << 8) + color[1];
+            colorHex = (colorHex << 8) + color[2];
+                
+            var bx = new THREE.Mesh(
+                boxGeo, new THREE.MeshStandardMaterial({
+                    "color" : colorHex
+                })
+            );
+            
+            bxx = (x * this.pixelSize) + (x * this.pixelDistance);
+			bxy = (y * this.pixelSize) + (y * this.pixelDistance);
+			bx.position.set(bxx, bxy, 0);
+
+			this.pixelGroup.add(bx);
         }
     }
+    
+    this.pixelGroup.rotateZ(Math.PI);
+    
+    scene.add(this.pixelGroup);
 }
 
 // TODO: stubbed, resize pixels properly, and don't forget to take center into account!
@@ -75,13 +101,14 @@ Sprite3D.prototype.genPixelArray = function(scene, xres, yres) {
 
 			// the box won't be centered, but this is to just test if
 			// we can get groups working properly in Three.js
-			bxx = (x * this.pixelSize) + (x * this.pixelDistance);
-			bxy = (y * this.pixelSize) + (y * this.pixelDistance);
+			bxx = ((width - x) * this.pixelSize) + ((width - x) * this.pixelDistance);
+			bxy = ((width - y) * this.pixelSize) + ((width - y) * this.pixelDistance);
 			bx.position.set(bxx, bxy, 0);
 
 			this.pixelGroup.add(bx);
 		}
 	}
 
+    this.pixelGroup.rotateZ(Math.PI / 2);
 	scene.add(this.pixelGroup);
 };
